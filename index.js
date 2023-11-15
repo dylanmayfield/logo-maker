@@ -1,25 +1,21 @@
-// GIVEN a command-line application that accepts user input
-// WHEN I am prompted for text
-// THEN I can enter up to three characters
-// WHEN I am prompted for the text color
-// THEN I can enter a color keyword (OR a hexadecimal number)
-// WHEN I am prompted for a shape
-// THEN I am presented with a list of shapes to choose from: circle, triangle, and square
-// WHEN I am prompted for the shape's color
-// THEN I can enter a color keyword (OR a hexadecimal number)
-// WHEN I have entered input for all the prompts
-// THEN an SVG file is created named `logo.svg`
-// AND the output text "Generated logo.svg" is printed in the command line
-// WHEN I open the `logo.svg` file in a browser
-// THEN I am shown a 300x200 pixel image that matches the criteria I entered
-
-// 1. Create a prompt that asks for the letters used, shape used and color for the shape
 
 
+// 1. Create a prompt that asks for the letters used, shape used and color for the shap
 
 const inquirer = require("inquirer");
 const fs = require('fs');
+const {Triangle, Square, Circle} = require('./lib/shapes');
 
+function writeToFile(fileName, answers) {
+    let svgString = '';
+    
+
+    fs.writeFile(fileName, answers, (err) => {
+        if (err) throw err;
+        console.log('The file has been saved!');
+    });
+}
+function promptUser() {
 inquirer
     .prompt ([
         {
@@ -29,8 +25,13 @@ inquirer
         },
         {
             type: 'input',
-            name: 'description',
-            message: 'What color do you want to use for your logo?'
+            name: 'textColor',
+            message: 'What color do you want to use for your logo? (enter a color keyword or hex code)'
+        },
+        { 
+            type: 'input',
+            name: 'shapeColor',
+            message: 'What background color do you want to use for the shape in your logo? (enter a color keyword or hex code)'
         },
         {
             type: 'list',
@@ -39,9 +40,16 @@ inquirer
             choices: ['Circle', 'Triangle', 'Square']
         },
     ])
-         // promises are chained to directly pass inquirer data into fetch request
-    .then((res) => console.log(res))
-    // promises are chained to parse the request for the json data
-    // .then((res) => res.json())
-    // // json data is accepted as user and logged to the console
-    // .then((user) => console.log(user));
+    .then((answers) => {
+        if (answers.text.length > 3) {
+            console.log('Please enter only three letters');
+            return;
+        } else {
+            console.log(answers);
+            writeToFile('logo.svg', answers);
+        }
+    })
+}
+
+promptUser();
+   
