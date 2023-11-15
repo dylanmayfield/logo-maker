@@ -6,15 +6,34 @@ const inquirer = require("inquirer");
 const fs = require('fs');
 const {Triangle, Square, Circle} = require('./lib/shapes');
 
-function writeToFile(fileName, answers) {
-    let svgString = '';
-    
-
-    fs.writeFile(fileName, answers, (err) => {
+function writeToFile(fileName, svgContent) {
+        fs.writeFile(fileName, svgContent, (err) => {
         if (err) throw err;
         console.log('The file has been saved!');
     });
 }
+
+function renderLogo(answers) {
+    let shape = '';
+    if (answers.shape === 'Circle') {
+        shape = new Circle(answers.shapeColor);
+    } else if (answers.shape === 'Triangle') {
+        shape = new Triangle(answers.shapeColor);
+    } else {
+        shape = new Square(answers.shapeColor);
+    }
+}
+
+const svgContent = `
+<svg width="300" height="200">
+    <rect width="100%" height="100%" fill="${answers.shapeColor}" />
+    ${shape.draw()}
+    <text fill="${answers.textColor}" font-size="45" font-family="Verdana" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">${answers.text}</text>
+</svg>
+`;
+
+writeToFile('logo.svg', svgContent);
+
 function promptUser() {
 inquirer
     .prompt ([
@@ -26,7 +45,7 @@ inquirer
         {
             type: 'input',
             name: 'textColor',
-            message: 'What color do you want to use for your logo? (enter a color keyword or hex code)'
+            message: 'What color do you want to use for your text color in your logo? (enter a color keyword or hex code)'
         },
         { 
             type: 'input',
