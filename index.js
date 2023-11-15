@@ -61,7 +61,7 @@ inquirer
         },
     ])
     .then((answers) => {
-        if (answers.text.length > 3) {
+        if (answers.name.length > 3) {
             console.log('Please enter only three letters');
             return;
         } else {
@@ -70,12 +70,9 @@ inquirer
         }
     })
     .catch((error) => {
-        if (error.isTtyError) {
-            console.log('Prompt could not be rendered in the current environment');
-        } else {
             console.log(error);
-            console.log('Something else went wrong');
-        }
+            console.log('Something went wrong');
+        
     });
 
 }
