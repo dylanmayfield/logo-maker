@@ -22,7 +22,7 @@ function renderLogo(answers) {
     } else {
         shape = new Square(answers.shapeColor);
     }
-}
+
 
 const svgContent = `
 <svg width="300" height="200">
@@ -33,6 +33,7 @@ const svgContent = `
 `;
 
 writeToFile('logo.svg', svgContent);
+}
 
 function promptUser() {
 inquirer
@@ -65,10 +66,18 @@ inquirer
             return;
         } else {
             console.log(answers);
-            writeToFile('logo.svg', answers);
+            renderLogo(answers);
         }
     })
-}
+    .catch((error) => {
+        if (error.isTtyError) {
+            console.log('Prompt could not be rendered in the current environment');
+        } else {
+            console.log(error);
+            console.log('Something else went wrong');
+        }
+    });
 
+}
 promptUser();
-   
+  
