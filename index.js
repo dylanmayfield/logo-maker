@@ -1,6 +1,6 @@
 
 
-// 1. Create a prompt that asks for the letters used, shape used and color for the shap
+// 1. Create a prompt that asks for the letters used, shape used and color for the shape
 
 const inquirer = require("inquirer");
 const fs = require('fs');
@@ -28,7 +28,7 @@ const svgContent = `
 <svg width="300" height="200">
     <rect width="100%" height="100%" fill="${answers.shapeColor}" />
     ${shape.draw()}
-    <text fill="${answers.textColor}" font-size="45" font-family="Verdana" x="50%" y="50%" dominant-baseline="middle" text-anchor="middle">${answers.text}</text>
+    <text x="10" y="25" fill="${answers.textColor}">${answers.name}</text>
 </svg>
 `;
 
